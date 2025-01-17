@@ -38,6 +38,7 @@
         $phone = $_POST["phone"];
         $location = $_POST["location"];
         $gender = $_POST["gender"] ?? "";
+        $photo = $_POST["photo"];
 
         // form validation 
         if (empty($name) || empty($email) || empty($phone) || empty($location) ) {
@@ -48,7 +49,24 @@
             $msg = createAlert("Data Stable", "success");
             resetForm();
           
+
+          // store data to json db 
+          $data = json_decode(file_get_contents("./db/team.json"), true);
+
+          array_push($data, [
+            "name" => $name,
+            "email" => $email,
+            "phone" => $phone,
+            "location" => $location,
+            "gender" => $gender,
+            "photo" => $photo,
+
+          ]);
+
+        file_put_contents("./db/team.json", json_encode($data));
         }
+
+
 
 
 
@@ -64,7 +82,7 @@
 
 
   <div class="container mt-5">
-    <div class="row justify-content-center">
+    <div class="row ">
       <div class="col-md-5 p-5 border shadow rounded">
         <div class="card">
           <div class="card-header">
@@ -128,12 +146,48 @@
                 </label>
               </div>
               <div class="my-2">
+                <label for=""> Photo </label>
+                <input type="text"
+                  class="form-control"
+                  name="photo"
+                  value="<?php echo old("photo")?>">
+              </div>
+              <div class="my-2">
                 <button class="btn btn-primary btn-sm"
                   type="submit"> Submit </button>
               </div>
             </form>
           </div>
         </div>
+      </div>
+      <div class="col-md-7">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Photo</th>
+              <th>Name</th>
+              <th>email</th>
+              <th>phone</th>
+              <th>location</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <?php
+           $team_data = json_decode(file_get_contents("./db/team.json"));
+           foreach($team_data as $team) : 
+          ?>
+            <tr class="align-middle">
+              <td> <img src="<?php echo $team -> photo ?>"
+                  alt=""></td>
+              <td><?php echo $team -> name ?></td>
+              <td> <?php echo $team -> email ?></td>
+              <td> <?php echo $team -> phone ?> </td>
+              <td> <?php echo $team -> location ?></td>
+            </tr>
+            <?php endforeach; ?>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
