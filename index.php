@@ -42,8 +42,12 @@
         // form validation 
         if (empty($name) || empty($email) || empty($phone) || empty($location) ) {
              $msg = createAlert("All fields are Required");
-        }else{
-            $msg = "<p class=\"alert alert-success d-flex justify-content-between\"> Data Stable  <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" ></button></p>";
+        }else if(filter_var($email, FILTER_VALIDATE_EMAIL) == false){
+            $msg = createAlert("Invalid Email Address", "warning");
+        } else{
+            $msg = createAlert("Data Stable", "success");
+            resetForm();
+          
         }
 
 
@@ -76,40 +80,48 @@
                 <label for=""> Name </label>
                 <input type="text"
                   class="form-control"
-                  name="name">
+                  name="name"
+                  value="<?php echo old("name")?>">
               </div>
               <div class="my-2">
                 <label for=""> Email </label>
                 <input type="text"
                   class="form-control"
-                  name="email">
+                  name="email"
+                  value="<?php echo old("email")?>">
               </div>
               <div class="my-2">
                 <label for=""> Phone </label>
                 <input type="text"
                   class="form-control"
-                  name="phone">
+                  name="phone"
+                  value="<?php echo old("phone")?>">
               </div>
               <div class="my-2">
                 <label for=""> Location </label>
                 <select name="location"
-                  id=""
                   class="form-control form-select">
-                  <option value="dhaka">Dhaka</option>
-                  <option value="rangpur">Rangpur</option>
-                  <option value="dinajpur">Dinajpur</option>
+                  <option value="">--select--</option>
+                  <option <?php echo old("location") == 'dhaka' ? "selected" : ""?>
+                    value="dhaka">Dhaka</option>
+                  <option <?php echo old("location") == 'rangpur' ? "selected" : ""?>
+                    value="rangpur">Rangpur</option>
+                  <option <?php echo old("location") == 'dinajpur' ? "selected" : ""?>
+                    value="dinajpur">Dinajpur</option>
                 </select>
               </div>
               <div class="my-2">
                 <label for="">Gender</label> <br>
                 <label for="">
                   <input type="radio"
+                    <?php echo old("gender") == 'male' ? "checked" : ""?>
                     name="gender"
                     id=""
                     value="male"> Male
                 </label>
                 <label for="">
                   <input type="radio"
+                    <?php echo old("gender") == 'female' ? "checked" : ""?>
                     name="gender"
                     id=""
                     value="female"> Female
