@@ -29,6 +29,7 @@
 <body>
 
   <?php
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   // GET FORM DATA 
   $name = $_POST["name"];
@@ -37,19 +38,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   // file manage 
   $tmp_name = $_FILES["profile"]["tmp_name"];
   $file_name = $_FILES["profile"]["name"];
+  $file_size = $_FILES["profile"]["size"] / (1024 * 1024);
+
+  // get file extension
+  $file_arr = explode(".", $file_name);
+  $file_ext = strtolower(end($file_arr));
+
+  // file name unique 
+   $unique_file_name = time() . "_" . rand(100000, 10000000) . "." .   $file_ext;
 
   // check validation 
   if (empty($name) || empty($phone)) {
      $msg = createAlert("All fields are required");
-  }else{
-
-  // upload file 
-  move_uploaded_file($tmp_name, "photos/" . $file_name);
+  }else if(!in_array($file_ext, ["png", "jpeg", "jpg", "gif", "webp"])){
+    $msg = createAlert("Invalid File Format", "warning");
+  }else if($file_size >= 500){
+    $msg = createAlert("File Size Limit Over!", "warning");
+  } else{
+    // upload file 
+    move_uploaded_file($tmp_name, "photos/" .  $unique_file_name);
 
     $msg = createAlert("Account created Successful", "success");
     resetForm(); 
   }
+
 }
+
+
 ?>
 
   <div class="container mt-5">
@@ -134,8 +149,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     previewCloseBtn.style.display = "none";
   }
   </script>
-
-
 
 </body>
 
