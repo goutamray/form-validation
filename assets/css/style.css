@@ -27,3 +27,33 @@
   background-color: transparent;
   display: none;
 }
+/* gall css */
+
+.gall-preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.gall-preview .gall-item {
+  width: 30%;
+  height: 120px;
+  margin-bottom: 30px;
+  position: relative;
+}
+.gall-preview .gall-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+  margin: 8px 0px;
+}
+.gall-preview .gall-item button {
+  position: absolute;
+  top: 20px;
+  right: 10px;
+  color: red;
+  font-size: 20px;
+  background-color: transparent;
+}
